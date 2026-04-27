@@ -1,225 +1,264 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Win 77 - Kerjasama</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Controller Pro Elite V3</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
-}
+    <style>
+        :root {
+            /* Background sangat gelap dan premium */
+            --main-bg: linear-gradient(135deg, #4b6a8a 0%, #163d63 40%, #01080f 100%);
+            --btn-blue: linear-gradient(180deg, #1e5799 0%, #2989d8 50%, #207cca 51%, #1e5799 100%);
+            --panel-bg: rgba(0, 0, 0, 0.4);
+        }
 
-/* Navbar */
-.navbar {
-    background-color: #0b1c3d;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    border-bottom: 2px solid #ccc;
-}
-.logo {
-    color: white;
-    font-weight: bold;
-    font-size: 24px;
-    font-style: italic;
-}
-.gold { color: #fcc203; }
-.menu-icon {
-    position: absolute;
-    right: 15px;
-    cursor: pointer;
-}
-.menu-icon span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    margin: 5px;
-}
-
-/* Banner */
-.header-banner {
-    background-color: #ffcc00;
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
-    font-family: serif;
-    font-size: 1.1rem;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-}
-
-/* Container */
-.container {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.form-card {
-    background: white;
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-h3 { margin-bottom: 10px; text-align: left; font-size: 1.2rem;}
-
-input[type="text"] {
-    width: 90%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.btn-accept {
-    background: linear-gradient(to bottom, #fdd835, #fbc02d);
-    border: 1px solid #f9a825;
-    padding: 12px 0;
-    width: 60%;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1rem;
-}
-
-.instruction { font-size: 0.9rem; margin-top: 10px; }
-
-.info-box {
-    margin-top: 15px;
-    border: 1px solid #e0c2c2;
-    background-color: #fff5f5;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    color: #444;
-}
-
-/* Bottom Nav */
-.footer-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #2b1138;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    border-top: 1px solid #555;
-}
-.nav-item { color: white; font-size: 1.2rem; cursor: pointer; }
-
-/* Overlay Halaman Baru */
-.success-page {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, #1a2a6c, #b21f1f, #fdbb2d);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    z-index: 100;
-}
-</style>
-</head>
-
-<body>
-
-<div class="navbar">
-    <div class="logo">WIN <span class="gold">77</span></div>
-    <div class="menu-icon"><span></span><span></span><span></span></div>
-</div>
-
-<div class="header-banner">
-    PROOF THAT YOU ARE WORTHY OF COOPERATION
-</div>
-
-<div class="container">
-    <div class="form-card">
-        <h3>MASUKKAN NOMINAL</h3>
-        <input type="text" id="nominal" placeholder="Contoh: 2,000,000">
+        body {
+            margin: 0; padding: 0;
+            background: var(--main-bg);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            color: white;
+            display: flex; flex-direction: column; align-items: center;
+            height: 100vh; overflow: hidden;
+            -webkit-user-select: none;
+        }
         
-        <button id="btnAccept" class="btn-accept">ACCEPT</button>
-        <p class="instruction">Klik accept untuk mensetujui</p>
+.net-error{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.35);
+    z-index:5000;
+}
 
-        <div class="info-box">
-            <p>Formulir harus isi saldo Sebesar <b>Rp.2.000.000,-</b> sebagai jaminan anda telah kerja sama dengan PRAGMATIC PLAY dan PGsoft.</p>
-            <p>Uang anda tidak akan hilang.</p>
-            <p>Uang tertanam dalam situs anda.</p>
-            <p>Karena ini adalah sebagai bukti bahwa anda memiliki uang yang cukup untuk perputaran uang dalam permainan, Bahkan Kerjasama dan menjaga nama baik Situs kami.</p>
-        </div>
+.net-error-box{
+    text-align:center;
+    padding:25px 35px;
+    border-radius:16px;
+    background:rgba(0,0,0,0.45);
+    border:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 0 30px rgba(0,0,0,0.6);
+}
+
+.wifi-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.net-title{
+    font-size:20px;
+    font-weight:bold;
+    letter-spacing:2px;
+    color:#ff3b30;
+}
+
+.net-sub{
+    font-size:13px;
+    color:#bbb;
+    margin-top:5px;
+}
+
+.net-status{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 0;
+    z-index: 2000;
+    letter-spacing: 1px;
+}
+
+.net-online{
+    background:#0f5132;
+    color:#4cd964;
+}
+
+.net-offline{
+    background:#3a0b0b;
+    color:#ff3b30;
+}
+        .header-title {
+            font-size: 38px; font-weight: 300; margin-top: 35px;
+            letter-spacing: 2px; text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }
+
+        .display-screen {
+            margin: 20px 0 10px 0;
+            width: 190px; height: 125px;
+            background: #000;
+            border: 3px solid #1a5ca3;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(26, 92, 163, 0.5), inset 0 0 15px #000;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            position: relative;
+        }
+
+        #turn-indicator {
+            position: absolute; top: 8px;
+            width: 40px; height: 8px; border-radius: 10px;
+            background: #111; transition: 0.3s;
+        }
+
+        #res {
+            font-size: 80px; font-weight: bold; color: #fff;
+        }
+
+        .mode-text {
+            color: #aaa; font-size: 20px; font-weight: 400;
+            margin-bottom: 5px; text-transform: uppercase;
+        }
+.gm-indicator{
+    position:absolute;
+    top:-22px;
+    font-size:16px;
+    font-weight:bold;
+    letter-spacing:1px;
+    text-shadow:0 0 6px rgba(0,0,0,0.7);
+}
+.gm-blue{ color:#007aff; }
+.gm-red{ color:#ff3b30; }
+.gm-green{ color:#4cd964; }
+.gm-yellow{ color:#ffcc00; }
+
+        /* Container Bulatan Pemain Dinamis */
+        .player-count-dots {
+            display: flex; gap: 10px; margin-bottom: 25px; height: 14px;
+            padding: 6px 15px; border-radius: 20px; background: var(--panel-bg);
+        }
+        .dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            display: none; /* Default tersembunyi */
+            transition: 0.3s;
+        }
+
+        .control-panel {
+            width: 80%; display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 25px;
+        }
+
+        .god-btn { font-size: 32px; font-weight: bold; cursor: pointer; }
+        .settings-btn { font-size: 34px; cursor: pointer; }
+
+        .grid-pad {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+        }
+
+        .btn {
+            width: 95px; height: 85px;
+            background: var(--btn-blue);
+            border: 1px solid #104880;
+            border-radius: 15px;
+            font-size: 40px; font-weight: 600;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 5px 0 #0a2e52, 0 8px 15px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #0a2e52; }
+
+        /* Status Colors */
+        .bg-blue { background: #007aff !important; box-shadow: 0 0 10px #007aff; }
+        .bg-red { background: #ff3b30 !important; box-shadow: 0 0 10px #ff3b30; }
+        .bg-green { background: #4cd964 !important; box-shadow: 0 0 10px #4cd964; }
+        .bg-yellow { background: #ffcc00 !important; box-shadow: 0 0 10px #ffcc00; }
+
+        /* Modals */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal {
+            background: #1c1f24; width: 80%; max-width: 300px;
+            border-radius: 15px; padding: 25px; text-align: center; border: 1px solid #333;
+        }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #000; color: #0f0; border-radius: 8px; border:1px solid #444; text-align:center; font-size:18px;}
+        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .save { background: #1a5ca3; color: white; }
+    </style>
+</head>
+<div id="net-error" class="net-error">
+    <div class="net-error-box">
+        <div class="wifi-icon">📡</div>
+        <div class="net-title">NO INTERNET ACCESS</div>
+        <div class="net-sub">Please enable network connection</div>
     </div>
 </div>
 
-<div class="footer-nav">
-    <div class="nav-item"><span>&#10094;</span></div>
-    <div class="nav-item"><span>&#128179;</span></div>
-    <div class="nav-item"><span>&#127873;</span></div>
-    <div class="nav-item"><span>&#128172;</span></div>
-    <div class="nav-item"><span>&#8962;</span></div>
-</div>
+<body>
+<div id="net-status" class="net-status offline">OFFLINE</div>
+    <div class="header-title">Controller Pro</div>
 
-<script>
-document.getElementById('btnAccept').addEventListener('click', function() {
-    const inputNominal = document.getElementById('nominal');
-    const nilai = inputNominal.value.trim();
+    <div class="display-screen">
+ <div id="gm-indicator" class="gm-indicator">AUTO WIN: -</div>
 
-    if (nilai === "") {
-        alert("MASUKKAN NOMIMAL TERLEBIH DAHULU");
-        inputNominal.focus();
-        inputNominal.style.border = "2px solid red";
-        return; 
-    }
+        <div id="turn-indicator"></div>
+        <div id="res">-</div>
+    </div>
 
-    document.body.innerHTML = `
-        <div class="success-page" style="
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #1a2a6c, #b21f1f, #fdbb2d);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            z-index: 9999;
-            font-family: sans-serif;
-        ">
-            <div style="padding: 30px; background: rgba(0,0,0,0.85); border-radius: 20px; border: 3px solid gold; box-shadow: 0 0 30px rgba(255,215,0,0.5); max-width: 85%;">
-                <div style="font-size: 4rem; margin-bottom: 10px;">✅</div>
-                <h1 style="color: gold; font-size: 2.2rem; margin-bottom: 20px; text-shadow: 2px 2px 4px black;">PROSES BERHASIL!</h1>
-                <p style="font-size: 1.5rem; line-height: 1.6; font-weight: bold;">
-                    Silahkan masuk ke server domain anda dan lakukan penanaman saldo
-                </p>
-                <div style="margin-top: 30px; animation: spin 2s linear infinite;">
-                    <span style="font-size: 3.5rem;">&#9881;</span>
-                </div>
-                <p style="margin-top: 20px; color: #ccc; font-style: italic;">Sistem sedang mensinkronisasi data...</p>
-            </div>
+    <div class="mode-text" id="m-type">SYNCING...</div>
+    
+    <div class="player-count-dots" id="dot-container">
+        <div class="dot" id="dot-blue"></div>
+        <div class="dot" id="dot-red"></div>
+        <div class="dot" id="dot-green"></div>
+        <div class="dot" id="dot-yellow"></div>
+    </div>
+
+    <div class="control-panel">
+        <div class="god-btn" onclick="openModal('gmModal')">Auto Win</div>
+        <div class="settings-btn" onclick="openModal('licModal')">⚙️</div>
+    </div>
+
+    <div class="grid-pad">
+        <div class="btn" onclick="sendDice(1)">1</div>
+        <div class="btn" onclick="sendDice(2)">2</div>
+        <div class="btn" onclick="sendDice(3)">3</div>
+        <div class="btn" onclick="sendDice(4)">4</div>
+        <div class="btn" onclick="sendDice(5)">5</div>
+        <div class="btn" onclick="sendDice(6)">6</div>
+    </div>
+
+    <div class="overlay" id="licModal">
+        <div class="modal">
+            <h3>DATABASE LOGIN</h3>
+            <input type="text" id="licInput" placeholder="Enter License ID">
+            <button class="action-btn save" onclick="saveLic()">ACTIVATE</button>
+            <button class="action-btn" onclick="closeModal('licModal')">CLOSE</button>
         </div>
-        <style>
-            @keyframes spin { 100% { transform: rotate(360deg); } }
-        </style>
-    `;
-});
+    </div>
 
-document.getElementById('nominal').addEventListener('input', function() {
-    this.style.border = "1px solid #ccc";
-});
-</script>
+    <div class="overlay" id="gmModal">
+        <div class="modal">
+            <h3>GOD MODE</h3>
+            <button class="action-btn bg-blue" style="color:white" onclick="pushGM('blue')">BLUE</button>
+            <button class="action-btn bg-red" style="color:white" onclick="pushGM('red')">RED</button>
+            <button class="action-btn bg-green" style="color:white" onclick="pushGM('green')">GREEN</button>
+            <button class="action-btn bg-yellow" style="color:white" onclick="pushGM('yellow')">YELLOW</button>
+            <hr style="border:0; border-top:1px solid #333; margin:10px 0">
+            <button class="action-btn" onclick="pushGM('')">RESET OFF</button>
+            <button class="action-btn" onclick="closeModal('gmModal')">CANCEL</button>
+        </div>
+    </div>
 
+    <script>
+const encoded = "Y29uc3QgZmlyZWJhc2VDb25maWcgPSB7CiAgICAgICAgICAgIGFwaUtleTogIkFJemFTeSIsCiAgICAgICAgICAgIGF1dGhEb21haW46ICJsdWRvLWtpbmdzLWI0YTRjLmZpcmViYXNlYXBwLmNvbSIsCiAgICAgICAgICAgIGRhdGFiYXNlVVJMOiAiaHR0cHM6Ly9sdWRvLWtpbmdzLWI0YTRjLWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbSIsCiAgICAgICAgICAgIHByb2plY3RJZDogImx1ZG8ta2luZ3MtYjRhNGMiCiAgICAgICAgfTsKICAgICAgICBmaXJlYmFzZS5pbml0aWFsaXplQXBwKGZpcmViYXNlQ29uZmlnKTsKICAgICAgICBjb25zdCBkYiA9IGZpcmViYXNlLmRhdGFiYXNlKCk7CgogICAgICAgIGxldCBsaWNlbnNlSWQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgibHVkb19saWNlbnNlIik7CiAgICAgICAgbGV0IGN1clR1cm4gPSBudWxsOwogICAgICAgIGNvbnN0IHBNYXAgPSB7IHJlZDogInIiLCBncmVlbjogImciLCB5ZWxsb3c6ICJ5IiwgYmx1ZTogImIiIH07CgogICAgICAgIGZ1bmN0aW9uIHJlZnJlc2hMb2dpYyhkYXRhKSB7CiAgICAgICAgICAgIGNvbnN0IGdUeXBlID0gZGF0YS5nYW1ldHlwZSB8fCAiIjsKICAgICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoIm0tdHlwZSIpLmlubmVyVGV4dCA9IGdUeXBlOwoKICAgICAgICAgICAgLy8gTG9naWthIFVydXRhbiBCZXJkYXNhcmthbiBUZWtzIGdhbWV0eXBlCiAgICAgICAgICAgIGNvbnN0IGRvdHMgPSB7CiAgICAgICAgICAgICAgICBibHVlOiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZG90LWJsdWUiKSwKICAgICAgICAgICAgICAgIHJlZDogZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImRvdC1yZWQiKSwKICAgICAgICAgICAgICAgIGdyZWVuOiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZG90LWdyZWVuIiksCiAgICAgICAgICAgICAgICB5ZWxsb3c6IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJkb3QteWVsbG93IikKICAgICAgICAgICAgfTsKCiAgICAgICAgICAgIC8vIFNlbWJ1bnlpa2FuIHNlbXVhIGJ1bGF0YW4gZHVsdQogICAgICAgICAgICBPYmplY3QudmFsdWVzKGRvdHMpLmZvckVhY2goZCA9PiB7CiAgICAgICAgICAgICAgICBkLnN0eWxlLmRpc3BsYXkgPSAibm9uZSI7CiAgICAgICAgICAgICAgICBkLmNsYXNzTmFtZSA9ICJkb3QiOwogICAgICAgICAgICB9KTsKCiAgICAgICAgICAgIGlmIChnVHlwZS5pbmNsdWRlcygiMlAiKSkgewogICAgICAgICAgICAgICAgLy8gMlAgPSBCaXJ1ICYgSGlqYXUKICAgICAgICAgICAgICAgIGRvdHMuYmx1ZS5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsgZG90cy5ibHVlLmNsYXNzTGlzdC5hZGQoImJnLWJsdWUiKTsKICAgICAgICAgICAgICAgIGRvdHMuZ3JlZW4uc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMuZ3JlZW4uY2xhc3NMaXN0LmFkZCgiYmctZ3JlZW4iKTsKICAgICAgICAgICAgfSAKICAgICAgICAgICAgZWxzZSBpZiAoZ1R5cGUuaW5jbHVkZXMoIjNQIikpIHsKICAgICAgICAgICAgICAgIC8vIDNQID0gQmlydSwgTWVyYWgsICYgSGlqYXUKICAgICAgICAgICAgICAgIGRvdHMuYmx1ZS5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsgZG90cy5ibHVlLmNsYXNzTGlzdC5hZGQoImJnLWJsdWUiKTsKICAgICAgICAgICAgICAgIGRvdHMucmVkLnN0eWxlLmRpc3BsYXkgPSAiYmxvY2siOyBkb3RzLnJlZC5jbGFzc0xpc3QuYWRkKCJiZy1yZWQiKTsKICAgICAgICAgICAgICAgIGRvdHMuZ3JlZW4uc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMuZ3JlZW4uY2xhc3NMaXN0LmFkZCgiYmctZ3JlZW4iKTsKICAgICAgICAgICAgfSAKICAgICAgICAgICAgZWxzZSBpZiAoZ1R5cGUuaW5jbHVkZXMoIjRQIikpIHsKICAgICAgICAgICAgICAgIC8vIDRQID0gQmlydSwgTWVyYWgsIEhpamF1LCAmIEt1bmluZwogICAgICAgICAgICAgICAgZG90cy5ibHVlLnN0eWxlLmRpc3BsYXkgPSAiYmxvY2siOyBkb3RzLmJsdWUuY2xhc3NMaXN0LmFkZCgiYmctYmx1ZSIpOwogICAgICAgICAgICAgICAgZG90cy5yZWQuc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMucmVkLmNsYXNzTGlzdC5hZGQoImJnLXJlZCIpOwogICAgICAgICAgICAgICAgZG90cy5ncmVlbi5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsgZG90cy5ncmVlbi5jbGFzc0xpc3QuYWRkKCJiZy1ncmVlbiIpOwogICAgICAgICAgICAgICAgZG90cy55ZWxsb3cuc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMueWVsbG93LmNsYXNzTGlzdC5hZGQoImJnLXllbGxvdyIpOwogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyBJbmRpa2F0b3IgR2lsaXJhbiAoS290YWsgQXRhcyBMYXlhcikKICAgICAgICAgICAgY3VyVHVybiA9IGRhdGEudHVybkNvbG9yOwogICAgICAgICAgICBjb25zdCBpbmQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgidHVybi1pbmRpY2F0b3IiKTsKICAgICAgICAgICAgaW5kLmNsYXNzTmFtZSA9ICIiOwogICAgICAgICAgICBpZihjdXJUdXJuKSBpbmQuY2xhc3NMaXN0LmFkZCgiYmctIiArIGN1clR1cm4pOwoKICAgICAgICAgICAgLy8gU3luYyBBbmdrYSBEaWNlCiAgICAgICAgICAgIGNvbnN0IGFjdGl2ZVBhdGggPSBwTWFwW2N1clR1cm5dOwogICAgICAgICAgICBjb25zdCB2YWwgPSBkYXRhW2FjdGl2ZVBhdGhdOwogICAgICAgICAgICBjb25zdCByZXNCb3ggPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicmVzIik7CiAgICAgICAgICAgIGlmKHZhbCA9PT0gbnVsbCB8fCB2YWwgPT09IHVuZGVmaW5lZCB8fCB2YWwgPT09ICIiIHx8IHZhbCA9PT0gLTEpIHsKICAgICAgICAgICAgICAgIHJlc0JveC5pbm5lclRleHQgPSAiLSI7CiAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICByZXNCb3guaW5uZXJUZXh0ID0gdmFsOwogICAgICAgICAgICB9Ci8vID09PT09IEdNIElORElDQVRPUiA9PT09PQpjb25zdCBnbUJveCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJnbS1pbmRpY2F0b3IiKTsKZ21Cb3guY2xhc3NOYW1lID0gImdtLWluZGljYXRvciI7CgppZihkYXRhLmdtICYmIGRhdGEuZ20gIT09ICIiKXsKICAgIGdtQm94LmlubmVyVGV4dCA9ICJBVVRPIFdJTjogIiArIGRhdGEuZ20udG9VcHBlckNhc2UoKTsKICAgIGdtQm94LmNsYXNzTGlzdC5hZGQoImdtLSIgKyBkYXRhLmdtKTsKfWVsc2V7CiAgICBnbUJveC5pbm5lclRleHQgPSAiQVVUTyBXSU46IE9GRiI7Cn0KICAgICAgICB9CgogICAgICAgIGZ1bmN0aW9uIHNlbmREaWNlKG4pIHsKICAgICAgICAgICAgaWYoIWxpY2Vuc2VJZCB8fCAhY3VyVHVybikgcmV0dXJuOwogICAgICAgICAgICBkYi5yZWYobGljZW5zZUlkKS51cGRhdGUoeyBbcE1hcFtjdXJUdXJuXV06IG4gfSk7CiAgICAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJyZXMiKS5pbm5lclRleHQgPSBuOwogICAgICAgIH0KCiAgICAgICAgZnVuY3Rpb24gb3Blbk1vZGFsKGlkKSB7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKGlkKS5zdHlsZS5kaXNwbGF5ID0gImZsZXgiOyB9CiAgICAgICAgZnVuY3Rpb24gY2xvc2VNb2RhbChpZCkgeyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChpZCkuc3R5bGUuZGlzcGxheSA9ICJub25lIjsgfQoKICAgICAgICBmdW5jdGlvbiBzYXZlTGljKCkgewogICAgICAgICAgICBsZXQgaWQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibGljSW5wdXQiKS52YWx1ZS50cmltKCk7CiAgICAgICAgICAgIGlmKGlkKSB7IGxvY2FsU3RvcmFnZS5zZXRJdGVtKCJsdWRvX2xpY2Vuc2UiLCBpZCk7IGxvY2F0aW9uLnJlbG9hZCgpOyB9CiAgICAgICAgfQoKICAgICAgICBmdW5jdGlvbiBwdXNoR00oY29sb3IpIHsKICAgICAgICAgICAgaWYobGljZW5zZUlkKSB7CiAgICAgICAgICAgICAgICBkYi5yZWYobGljZW5zZUlkKS51cGRhdGUoeyBnbTogY29sb3IgfSk7CiAgICAgICAgICAgICAgICBjbG9zZU1vZGFsKCdnbU1vZGFsJyk7CiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIGlmKGxpY2Vuc2VJZCkgewogICAgICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibGljSW5wdXQiKS52YWx1ZSA9IGxpY2Vuc2VJZDsKICAgICAgICAgICAgZGIucmVmKGxpY2Vuc2VJZCkub24oInZhbHVlIiwgc25hcCA9PiB7CiAgICAgICAgICAgICAgICBsZXQgZGF0YSA9IHNuYXAudmFsKCk7CiAgICAgICAgICAgICAgICBpZihkYXRhKSByZWZyZXNoTG9naWMoZGF0YSk7CiAgICAgICAgICAgIH0pOwogICAgICAgIH0KLy8gPT09PT0gTkVUV09SSyBTVEFUVVMgPT09PT0KY29uc3QgbmV0Qm94ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoIm5ldC1zdGF0dXMiKTsKCmZ1bmN0aW9uIHVwZGF0ZU5ldHdvcmtTdGF0dXMoKXsKICAgIGlmKG5hdmlnYXRvci5vbkxpbmUpewogICAgICAgIG5ldEJveC5pbm5lclRleHQgPSAiT05MSU5FIjsKICAgICAgICBuZXRCb3guY2xhc3NOYW1lID0gIm5ldC1zdGF0dXMgbmV0LW9ubGluZSI7CiAgICB9ZWxzZXsKICAgICAgICBuZXRCb3guaW5uZXJUZXh0ID0gIk9GRkxJTkUiOwogICAgICAgIG5ldEJveC5jbGFzc05hbWUgPSAibmV0LXN0YXR1cyBuZXQtb2ZmbGluZSI7CiAgICB9Cn0KCi8vIGNlayBzYWF0IGxvYWQKdXBkYXRlTmV0d29ya1N0YXR1cygpOwoKLy8gY2VrIHNhYXQgamFyaW5nYW4gYmVydWJhaAp3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigib25saW5lIiwgdXBkYXRlTmV0d29ya1N0YXR1cyk7CndpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJvZmZsaW5lIiwgdXBkYXRlTmV0d29ya1N0YXR1cyk7CgpmdW5jdGlvbiBzaG93TmV0RXJyb3IoKXsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJuZXQtZXJyb3IiKS5zdHlsZS5kaXNwbGF5PSJmbGV4IjsKfQoKd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoImVycm9yIiwgZnVuY3Rpb24oZSl7CiAgICBpZihlLm1lc3NhZ2UgJiYgZS5tZXNzYWdlLmluY2x1ZGVzKCJmaXJlYmFzZSIpKXsKICAgICAgICBzaG93TmV0RXJyb3IoKTsKICAgIH0KfSk7CgpmdW5jdGlvbiBjaGVja0ludGVybmV0KCl7CiAgICBpZighbmF2aWdhdG9yLm9uTGluZSl7CiAgICAgICAgc2hvd05ldEVycm9yKCk7CiAgICB9ZWxzZXsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibmV0LWVycm9yIikuc3R5bGUuZGlzcGxheT0ibm9uZSI7CiAgICB9Cn0KCnNldEludGVydmFsKGNoZWNrSW50ZXJuZXQsMjAwMCk7CmNoZWNrSW50ZXJuZXQoKTs=";
+  const decoded = atob(encoded);
+  eval(decoded);
+        
+    </script>
 </body>
 </html>
