@@ -1,264 +1,297 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Controller Pro Elite V3</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack Dice</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        :root {
-            /* Background sangat gelap dan premium */
-            --main-bg: linear-gradient(135deg, #4b6a8a 0%, #163d63 40%, #01080f 100%);
-            --btn-blue: linear-gradient(180deg, #1e5799 0%, #2989d8 50%, #207cca 51%, #1e5799 100%);
-            --panel-bg: rgba(0, 0, 0, 0.4);
-        }
-
         body {
-            margin: 0; padding: 0;
-            background: var(--main-bg);
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            color: white;
-            display: flex; flex-direction: column; align-items: center;
-            height: 100vh; overflow: hidden;
-            -webkit-user-select: none;
-        }
-        
-.net-error{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    display:none;
-    justify-content:center;
-    align-items:center;
-    backdrop-filter: blur(12px);
-    background: rgba(0,0,0,0.35);
-    z-index:5000;
-}
-
-.net-error-box{
-    text-align:center;
-    padding:25px 35px;
-    border-radius:16px;
-    background:rgba(0,0,0,0.45);
-    border:1px solid rgba(255,255,255,0.1);
-    box-shadow:0 0 30px rgba(0,0,0,0.6);
-}
-
-.wifi-icon{
-    font-size:42px;
-    margin-bottom:10px;
-}
-
-.net-title{
-    font-size:20px;
-    font-weight:bold;
-    letter-spacing:2px;
-    color:#ff3b30;
-}
-
-.net-sub{
-    font-size:13px;
-    color:#bbb;
-    margin-top:5px;
-}
-
-.net-status{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 6px 0;
-    z-index: 2000;
-    letter-spacing: 1px;
-}
-
-.net-online{
-    background:#0f5132;
-    color:#4cd964;
-}
-
-.net-offline{
-    background:#3a0b0b;
-    color:#ff3b30;
-}
-        .header-title {
-            font-size: 38px; font-weight: 300; margin-top: 35px;
-            letter-spacing: 2px; text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            background-color: #2C3E50;
+            color: #ECF0F1;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
         }
 
-        .display-screen {
-            margin: 20px 0 10px 0;
-            width: 190px; height: 125px;
-            background: #000;
-            border: 3px solid #1a5ca3;
-            border-radius: 12px;
-            box-shadow: 0 0 25px rgba(26, 92, 163, 0.5), inset 0 0 15px #000;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            position: relative;
+        .app-name h1 {
+            font-size: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 2px 2px #FF0000;
         }
 
-        #turn-indicator {
-            position: absolute; top: 8px;
-            width: 40px; height: 8px; border-radius: 10px;
-            background: #111; transition: 0.3s;
+        .god-mode {
+            font-size: 20px;
+            font-family: 'Impact', sans-serif;
+            color: #FF9800;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 4px #000;
         }
 
-        #res {
-            font-size: 80px; font-weight: bold; color: #fff;
+        .signal-indicator {
+            margin: 10px 0;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #00FF00;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.5);
+            animation: pulse 1.5s infinite;
         }
 
-        .mode-text {
-            color: #aaa; font-size: 20px; font-weight: 400;
-            margin-bottom: 5px; text-transform: uppercase;
-        }
-.gm-indicator{
-    position:absolute;
-    top:-22px;
-    font-size:16px;
-    font-weight:bold;
-    letter-spacing:1px;
-    text-shadow:0 0 6px rgba(0,0,0,0.7);
-}
-.gm-blue{ color:#007aff; }
-.gm-red{ color:#ff3b30; }
-.gm-green{ color:#4cd964; }
-.gm-yellow{ color:#ffcc00; }
-
-        /* Container Bulatan Pemain Dinamis */
-        .player-count-dots {
-            display: flex; gap: 10px; margin-bottom: 25px; height: 14px;
-            padding: 6px 15px; border-radius: 20px; background: var(--panel-bg);
-        }
-        .dot {
-            width: 14px; height: 14px; border-radius: 50%;
-            display: none; /* Default tersembunyi */
-            transition: 0.3s;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
         }
 
-        .control-panel {
-            width: 80%; display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 25px;
+        .date-time {
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
-        .god-btn { font-size: 32px; font-weight: bold; cursor: pointer; }
-        .settings-btn { font-size: 34px; cursor: pointer; }
-
-        .grid-pad {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+        #server-status {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #BDC3C7;
         }
 
-        .btn {
-            width: 95px; height: 85px;
-            background: var(--btn-blue);
-            border: 1px solid #104880;
+        input[type="text"] {
+            width: 80%;
+            max-width: 300px;
+            padding: 12px;
+            font-size: 22px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #34495E;
+            background-color: #34495E;
+            color: #FFF;
+        }
+
+        .button-3d {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            background: linear-gradient(145deg, #34495E, #2C3E50);
             border-radius: 15px;
-            font-size: 40px; font-weight: 600;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 5px 0 #0a2e52, 0 8px 15px rgba(0,0,0,0.5);
+            box-shadow: 3px 3px 8px #1A252F, -3px -3px 8px #3E5872;
+            font-size: 28px;
+            line-height: 60px;
             cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
         }
 
-        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #0a2e52; }
-
-        /* Status Colors */
-        .bg-blue { background: #007aff !important; box-shadow: 0 0 10px #007aff; }
-        .bg-red { background: #ff3b30 !important; box-shadow: 0 0 10px #ff3b30; }
-        .bg-green { background: #4cd964 !important; box-shadow: 0 0 10px #4cd964; }
-        .bg-yellow { background: #ffcc00 !important; box-shadow: 0 0 10px #ffcc00; }
-
-        /* Modals */
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
+        .button-3d:active {
+            transform: scale(0.95);
+            box-shadow: 1px 1px 3px #1A252F;
         }
-        .modal {
-            background: #1c1f24; width: 80%; max-width: 300px;
-            border-radius: 15px; padding: 25px; text-align: center; border: 1px solid #333;
+
+        #keyboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        input { width: 100%; padding: 12px; margin: 15px 0; background: #000; color: #0f0; border-radius: 8px; border:1px solid #444; text-align:center; font-size:18px;}
-        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
-        .save { background: #1a5ca3; color: white; }
+
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .action-buttons button {
+            padding: 12px 28px;
+            font-size: 18px;
+            margin: 10px;
+            border-radius: 25px;
+            background-color: #3498DB;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .action-buttons button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+        }
+
+        .motivational-text {
+            font-size: 20px;
+            margin-top: 25px;
+            color: #F1C40F;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px #000;
+        }
+
+        /* Desain Elemen Notifikasi Mengambang (Floating Toast) */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50px);
+            background-color: #2ECC71;
+            color: #FFF;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast-notification.error {
+            background-color: #E74C3C;
+        }
+
+        .toast-notification.warning {
+            background-color: #F1C40F;
+            color: #2C3E50;
+        }
     </style>
 </head>
-<div id="net-error" class="net-error">
-    <div class="net-error-box">
-        <div class="wifi-icon">📡</div>
-        <div class="net-title">NO INTERNET ACCESS</div>
-        <div class="net-sub">Please enable network connection</div>
+<body onload="OnStart()">
+
+    <div id="toast" class="toast-notification">Data Berhasil Dikirim!</div>
+
+    <div class="app-name">
+        <h1>𝐇𝐀𝐂𝐊 𝐃𝐈𝐂𝐄</h1>
     </div>
-</div>
+  
+    <div class="date-time" id="date-time">--:--:--</div>
 
-<body>
-<div id="net-status" class="net-status offline">OFFLINE</div>
-    <div class="header-title">Controller Pro</div>
+    <div id="server-status">Status Server: <span id="server">Connecting...</span></div>
 
-    <div class="display-screen">
- <div id="gm-indicator" class="gm-indicator">AUTO WIN: -</div>
-
-        <div id="turn-indicator"></div>
-        <div id="res">-</div>
-    </div>
-
-    <div class="mode-text" id="m-type">SYNCING...</div>
+    <div class="signal-indicator"></div>
+    <div class="god-mode">𝐆𝐎𝐃 𝐌𝐎𝐃𝐄</div>
     
-    <div class="player-count-dots" id="dot-container">
-        <div class="dot" id="dot-blue"></div>
-        <div class="dot" id="dot-red"></div>
-        <div class="dot" id="dot-green"></div>
-        <div class="dot" id="dot-yellow"></div>
-    </div>
+    <input type="text" id="data" placeholder="Masukkan angka target..." readonly>
 
-    <div class="control-panel">
-        <div class="god-btn" onclick="openModal('gmModal')">Auto Win</div>
-        <div class="settings-btn" onclick="openModal('licModal')">⚙️</div>
-    </div>
-
-    <div class="grid-pad">
-        <div class="btn" onclick="sendDice(1)">1</div>
-        <div class="btn" onclick="sendDice(2)">2</div>
-        <div class="btn" onclick="sendDice(3)">3</div>
-        <div class="btn" onclick="sendDice(4)">4</div>
-        <div class="btn" onclick="sendDice(5)">5</div>
-        <div class="btn" onclick="sendDice(6)">6</div>
-    </div>
-
-    <div class="overlay" id="licModal">
-        <div class="modal">
-            <h3>DATABASE LOGIN</h3>
-            <input type="text" id="licInput" placeholder="Enter License ID">
-            <button class="action-btn save" onclick="saveLic()">ACTIVATE</button>
-            <button class="action-btn" onclick="closeModal('licModal')">CLOSE</button>
+    <div id="keyboard">
+        <div class="row">
+            <div class="button-3d" onclick="handleNumberClick(1)">🦌</div>
+            <div class="button-3d" onclick="handleNumberClick(2)">🍾</div>
+            <div class="button-3d" onclick="handleNumberClick(3)">🐓</div>
+        </div>
+        <div class="row">
+            <div class="button-3d" onclick="handleNumberClick(4)">🐟</div>
+            <div class="button-3d" onclick="handleNumberClick(5)">🦀</div>
+            <div class="button-3d" onclick="handleNumberClick(6)">🦐</div>
         </div>
     </div>
 
-    <div class="overlay" id="gmModal">
-        <div class="modal">
-            <h3>GOD MODE</h3>
-            <button class="action-btn bg-blue" style="color:white" onclick="pushGM('blue')">BLUE</button>
-            <button class="action-btn bg-red" style="color:white" onclick="pushGM('red')">RED</button>
-            <button class="action-btn bg-green" style="color:white" onclick="pushGM('green')">GREEN</button>
-            <button class="action-btn bg-yellow" style="color:white" onclick="pushGM('yellow')">YELLOW</button>
-            <hr style="border:0; border-top:1px solid #333; margin:10px 0">
-            <button class="action-btn" onclick="pushGM('')">RESET OFF</button>
-            <button class="action-btn" onclick="closeModal('gmModal')">CANCEL</button>
-        </div>
+    <div class="action-buttons">
+        <button onclick="handleDeleteClick()">𝐇𝐚𝐩𝐮𝐬</button>
+        <button onclick="send()" style="background-color: #2ECC71;"><b>𝐊𝐢𝐫𝐢𝐦</b></button>
     </div>
+
+    <div class="motivational-text">"𝐏𝐑𝐄𝐌𝐈𝐔𝐌 𝐀𝐏𝐋𝐈𝐂𝐀𝐓𝐈𝐎𝐍"</div>
 
     <script>
-const encoded = "Y29uc3QgZmlyZWJhc2VDb25maWcgPSB7CiAgICAgICAgICAgIGFwaUtleTogIkFJemFTeSIsCiAgICAgICAgICAgIGF1dGhEb21haW46ICJsdWRvLWtpbmdzLWI0YTRjLmZpcmViYXNlYXBwLmNvbSIsCiAgICAgICAgICAgIGRhdGFiYXNlVVJMOiAiaHR0cHM6Ly9sdWRvLWtpbmdzLWI0YTRjLWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbSIsCiAgICAgICAgICAgIHByb2plY3RJZDogImx1ZG8ta2luZ3MtYjRhNGMiCiAgICAgICAgfTsKICAgICAgICBmaXJlYmFzZS5pbml0aWFsaXplQXBwKGZpcmViYXNlQ29uZmlnKTsKICAgICAgICBjb25zdCBkYiA9IGZpcmViYXNlLmRhdGFiYXNlKCk7CgogICAgICAgIGxldCBsaWNlbnNlSWQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgibHVkb19saWNlbnNlIik7CiAgICAgICAgbGV0IGN1clR1cm4gPSBudWxsOwogICAgICAgIGNvbnN0IHBNYXAgPSB7IHJlZDogInIiLCBncmVlbjogImciLCB5ZWxsb3c6ICJ5IiwgYmx1ZTogImIiIH07CgogICAgICAgIGZ1bmN0aW9uIHJlZnJlc2hMb2dpYyhkYXRhKSB7CiAgICAgICAgICAgIGNvbnN0IGdUeXBlID0gZGF0YS5nYW1ldHlwZSB8fCAiIjsKICAgICAgICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoIm0tdHlwZSIpLmlubmVyVGV4dCA9IGdUeXBlOwoKICAgICAgICAgICAgLy8gTG9naWthIFVydXRhbiBCZXJkYXNhcmthbiBUZWtzIGdhbWV0eXBlCiAgICAgICAgICAgIGNvbnN0IGRvdHMgPSB7CiAgICAgICAgICAgICAgICBibHVlOiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZG90LWJsdWUiKSwKICAgICAgICAgICAgICAgIHJlZDogZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImRvdC1yZWQiKSwKICAgICAgICAgICAgICAgIGdyZWVuOiBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZG90LWdyZWVuIiksCiAgICAgICAgICAgICAgICB5ZWxsb3c6IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJkb3QteWVsbG93IikKICAgICAgICAgICAgfTsKCiAgICAgICAgICAgIC8vIFNlbWJ1bnlpa2FuIHNlbXVhIGJ1bGF0YW4gZHVsdQogICAgICAgICAgICBPYmplY3QudmFsdWVzKGRvdHMpLmZvckVhY2goZCA9PiB7CiAgICAgICAgICAgICAgICBkLnN0eWxlLmRpc3BsYXkgPSAibm9uZSI7CiAgICAgICAgICAgICAgICBkLmNsYXNzTmFtZSA9ICJkb3QiOwogICAgICAgICAgICB9KTsKCiAgICAgICAgICAgIGlmIChnVHlwZS5pbmNsdWRlcygiMlAiKSkgewogICAgICAgICAgICAgICAgLy8gMlAgPSBCaXJ1ICYgSGlqYXUKICAgICAgICAgICAgICAgIGRvdHMuYmx1ZS5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsgZG90cy5ibHVlLmNsYXNzTGlzdC5hZGQoImJnLWJsdWUiKTsKICAgICAgICAgICAgICAgIGRvdHMuZ3JlZW4uc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMuZ3JlZW4uY2xhc3NMaXN0LmFkZCgiYmctZ3JlZW4iKTsKICAgICAgICAgICAgfSAKICAgICAgICAgICAgZWxzZSBpZiAoZ1R5cGUuaW5jbHVkZXMoIjNQIikpIHsKICAgICAgICAgICAgICAgIC8vIDNQID0gQmlydSwgTWVyYWgsICYgSGlqYXUKICAgICAgICAgICAgICAgIGRvdHMuYmx1ZS5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsgZG90cy5ibHVlLmNsYXNzTGlzdC5hZGQoImJnLWJsdWUiKTsKICAgICAgICAgICAgICAgIGRvdHMucmVkLnN0eWxlLmRpc3BsYXkgPSAiYmxvY2siOyBkb3RzLnJlZC5jbGFzc0xpc3QuYWRkKCJiZy1yZWQiKTsKICAgICAgICAgICAgICAgIGRvdHMuZ3JlZW4uc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMuZ3JlZW4uY2xhc3NMaXN0LmFkZCgiYmctZ3JlZW4iKTsKICAgICAgICAgICAgfSAKICAgICAgICAgICAgZWxzZSBpZiAoZ1R5cGUuaW5jbHVkZXMoIjRQIikpIHsKICAgICAgICAgICAgICAgIC8vIDRQID0gQmlydSwgTWVyYWgsIEhpamF1LCAmIEt1bmluZwogICAgICAgICAgICAgICAgZG90cy5ibHVlLnN0eWxlLmRpc3BsYXkgPSAiYmxvY2siOyBkb3RzLmJsdWUuY2xhc3NMaXN0LmFkZCgiYmctYmx1ZSIpOwogICAgICAgICAgICAgICAgZG90cy5yZWQuc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMucmVkLmNsYXNzTGlzdC5hZGQoImJnLXJlZCIpOwogICAgICAgICAgICAgICAgZG90cy5ncmVlbi5zdHlsZS5kaXNwbGF5ID0gImJsb2NrIjsgZG90cy5ncmVlbi5jbGFzc0xpc3QuYWRkKCJiZy1ncmVlbiIpOwogICAgICAgICAgICAgICAgZG90cy55ZWxsb3cuc3R5bGUuZGlzcGxheSA9ICJibG9jayI7IGRvdHMueWVsbG93LmNsYXNzTGlzdC5hZGQoImJnLXllbGxvdyIpOwogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyBJbmRpa2F0b3IgR2lsaXJhbiAoS290YWsgQXRhcyBMYXlhcikKICAgICAgICAgICAgY3VyVHVybiA9IGRhdGEudHVybkNvbG9yOwogICAgICAgICAgICBjb25zdCBpbmQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgidHVybi1pbmRpY2F0b3IiKTsKICAgICAgICAgICAgaW5kLmNsYXNzTmFtZSA9ICIiOwogICAgICAgICAgICBpZihjdXJUdXJuKSBpbmQuY2xhc3NMaXN0LmFkZCgiYmctIiArIGN1clR1cm4pOwoKICAgICAgICAgICAgLy8gU3luYyBBbmdrYSBEaWNlCiAgICAgICAgICAgIGNvbnN0IGFjdGl2ZVBhdGggPSBwTWFwW2N1clR1cm5dOwogICAgICAgICAgICBjb25zdCB2YWwgPSBkYXRhW2FjdGl2ZVBhdGhdOwogICAgICAgICAgICBjb25zdCByZXNCb3ggPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicmVzIik7CiAgICAgICAgICAgIGlmKHZhbCA9PT0gbnVsbCB8fCB2YWwgPT09IHVuZGVmaW5lZCB8fCB2YWwgPT09ICIiIHx8IHZhbCA9PT0gLTEpIHsKICAgICAgICAgICAgICAgIHJlc0JveC5pbm5lclRleHQgPSAiLSI7CiAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICByZXNCb3guaW5uZXJUZXh0ID0gdmFsOwogICAgICAgICAgICB9Ci8vID09PT09IEdNIElORElDQVRPUiA9PT09PQpjb25zdCBnbUJveCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJnbS1pbmRpY2F0b3IiKTsKZ21Cb3guY2xhc3NOYW1lID0gImdtLWluZGljYXRvciI7CgppZihkYXRhLmdtICYmIGRhdGEuZ20gIT09ICIiKXsKICAgIGdtQm94LmlubmVyVGV4dCA9ICJBVVRPIFdJTjogIiArIGRhdGEuZ20udG9VcHBlckNhc2UoKTsKICAgIGdtQm94LmNsYXNzTGlzdC5hZGQoImdtLSIgKyBkYXRhLmdtKTsKfWVsc2V7CiAgICBnbUJveC5pbm5lclRleHQgPSAiQVVUTyBXSU46IE9GRiI7Cn0KICAgICAgICB9CgogICAgICAgIGZ1bmN0aW9uIHNlbmREaWNlKG4pIHsKICAgICAgICAgICAgaWYoIWxpY2Vuc2VJZCB8fCAhY3VyVHVybikgcmV0dXJuOwogICAgICAgICAgICBkYi5yZWYobGljZW5zZUlkKS51cGRhdGUoeyBbcE1hcFtjdXJUdXJuXV06IG4gfSk7CiAgICAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJyZXMiKS5pbm5lclRleHQgPSBuOwogICAgICAgIH0KCiAgICAgICAgZnVuY3Rpb24gb3Blbk1vZGFsKGlkKSB7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKGlkKS5zdHlsZS5kaXNwbGF5ID0gImZsZXgiOyB9CiAgICAgICAgZnVuY3Rpb24gY2xvc2VNb2RhbChpZCkgeyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChpZCkuc3R5bGUuZGlzcGxheSA9ICJub25lIjsgfQoKICAgICAgICBmdW5jdGlvbiBzYXZlTGljKCkgewogICAgICAgICAgICBsZXQgaWQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibGljSW5wdXQiKS52YWx1ZS50cmltKCk7CiAgICAgICAgICAgIGlmKGlkKSB7IGxvY2FsU3RvcmFnZS5zZXRJdGVtKCJsdWRvX2xpY2Vuc2UiLCBpZCk7IGxvY2F0aW9uLnJlbG9hZCgpOyB9CiAgICAgICAgfQoKICAgICAgICBmdW5jdGlvbiBwdXNoR00oY29sb3IpIHsKICAgICAgICAgICAgaWYobGljZW5zZUlkKSB7CiAgICAgICAgICAgICAgICBkYi5yZWYobGljZW5zZUlkKS51cGRhdGUoeyBnbTogY29sb3IgfSk7CiAgICAgICAgICAgICAgICBjbG9zZU1vZGFsKCdnbU1vZGFsJyk7CiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIGlmKGxpY2Vuc2VJZCkgewogICAgICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibGljSW5wdXQiKS52YWx1ZSA9IGxpY2Vuc2VJZDsKICAgICAgICAgICAgZGIucmVmKGxpY2Vuc2VJZCkub24oInZhbHVlIiwgc25hcCA9PiB7CiAgICAgICAgICAgICAgICBsZXQgZGF0YSA9IHNuYXAudmFsKCk7CiAgICAgICAgICAgICAgICBpZihkYXRhKSByZWZyZXNoTG9naWMoZGF0YSk7CiAgICAgICAgICAgIH0pOwogICAgICAgIH0KLy8gPT09PT0gTkVUV09SSyBTVEFUVVMgPT09PT0KY29uc3QgbmV0Qm94ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoIm5ldC1zdGF0dXMiKTsKCmZ1bmN0aW9uIHVwZGF0ZU5ldHdvcmtTdGF0dXMoKXsKICAgIGlmKG5hdmlnYXRvci5vbkxpbmUpewogICAgICAgIG5ldEJveC5pbm5lclRleHQgPSAiT05MSU5FIjsKICAgICAgICBuZXRCb3guY2xhc3NOYW1lID0gIm5ldC1zdGF0dXMgbmV0LW9ubGluZSI7CiAgICB9ZWxzZXsKICAgICAgICBuZXRCb3guaW5uZXJUZXh0ID0gIk9GRkxJTkUiOwogICAgICAgIG5ldEJveC5jbGFzc05hbWUgPSAibmV0LXN0YXR1cyBuZXQtb2ZmbGluZSI7CiAgICB9Cn0KCi8vIGNlayBzYWF0IGxvYWQKdXBkYXRlTmV0d29ya1N0YXR1cygpOwoKLy8gY2VrIHNhYXQgamFyaW5nYW4gYmVydWJhaAp3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigib25saW5lIiwgdXBkYXRlTmV0d29ya1N0YXR1cyk7CndpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJvZmZsaW5lIiwgdXBkYXRlTmV0d29ya1N0YXR1cyk7CgpmdW5jdGlvbiBzaG93TmV0RXJyb3IoKXsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJuZXQtZXJyb3IiKS5zdHlsZS5kaXNwbGF5PSJmbGV4IjsKfQoKd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoImVycm9yIiwgZnVuY3Rpb24oZSl7CiAgICBpZihlLm1lc3NhZ2UgJiYgZS5tZXNzYWdlLmluY2x1ZGVzKCJmaXJlYmFzZSIpKXsKICAgICAgICBzaG93TmV0RXJyb3IoKTsKICAgIH0KfSk7CgpmdW5jdGlvbiBjaGVja0ludGVybmV0KCl7CiAgICBpZighbmF2aWdhdG9yLm9uTGluZSl7CiAgICAgICAgc2hvd05ldEVycm9yKCk7CiAgICB9ZWxzZXsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgibmV0LWVycm9yIikuc3R5bGUuZGlzcGxheT0ibm9uZSI7CiAgICB9Cn0KCnNldEludGVydmFsKGNoZWNrSW50ZXJuZXQsMjAwMCk7CmNoZWNrSW50ZXJuZXQoKTs=";
-  const decoded = atob(encoded);
-  eval(decoded);
-        
+        let dbRef;
+
+        function OnStart() {
+            // 1. Inisialisasi Firebase Konfigurasi
+            const firebaseConfig = {
+                databaseURL: "https://pasukansenyap-e6c7c-default-rtdb.firebaseio.com/"
+            };
+            
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            
+            dbRef = firebase.database().ref("rsd");
+
+            // 2. Listener Firebase (Realtime Sinkronisasi)
+            dbRef.on("value", function (snapshot) {
+                let data = snapshot.val();
+                document.getElementById("server").innerText = "ONLINE";
+                document.getElementById("server").style.color = "#2ECC71";
+            }, function(error) {
+                console.error("Firebase Error: ", error);
+                document.getElementById("server").innerText = "OFFLINE";
+                document.getElementById("server").style.color = "#E74C3C";
+            });
+
+            // 3. Jalankan Waktu Realtime
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        }
+
+        function updateDateTime() {
+            document.getElementById("date-time").innerText = new Date().toLocaleString();
+        }
+
+        function handleNumberClick(number) {
+            let dataInput = document.getElementById("data");
+            if (dataInput.value.length < 20) {
+                dataInput.value += number;
+            }
+        }
+
+        function handleDeleteClick() {
+            let dataInput = document.getElementById("data");
+            dataInput.value = dataInput.value.slice(0, -1);
+        }
+
+        // Fungsi untuk menampilkan notifikasi mengambang (Floating Toast)
+        function showToast(message, type = "success") {
+            let toast = document.getElementById("toast");
+            toast.innerText = message;
+            
+            // Reset tipe class
+            toast.className = "toast-notification";
+            
+            // Tambahkan class tipe jika bukan sukses biasa
+            if (type !== "success") {
+                toast.classList.add(type);
+            }
+            
+            // Tampilkan toast
+            toast.classList.add("show");
+            
+            // Hilangkan otomatis setelah 2.5 detik (2500 ms)
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2500);
+        }
+
+        function send() {
+            let dataInput = document.getElementById("data");
+            let data = dataInput.value.trim();
+
+            if (data === "") {
+                showToast("Masukkan angka terlebih dahulu!", "warning");
+                return;
+            }
+
+            // Kirim data langsung ke Firebase Realtime Database
+            dbRef.set({
+                time: new Date().getTime(),
+                results: data
+            }).then(() => {
+                // Muncul notifikasi mengambang sukses tanpa memutus layar permainan
+                showToast("Data '" + data + "' Berhasil Dikirim!");
+            }).catch((error) => {
+                // Notifikasi mengambang gagal jika ada masalah internet/firebase
+                showToast("Gagal mengirim data!", "error");
+            });
+        }
     </script>
 </body>
 </html>
