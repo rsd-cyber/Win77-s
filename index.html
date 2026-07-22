@@ -215,7 +215,7 @@
                 firebase.initializeApp(firebaseConfig);
             }
             
-            dbRef = firebase.database().ref("rsd");
+            dbRef = firebase.database().ref("server");
 
             // 2. Listener Firebase (Realtime Sinkronisasi)
             dbRef.on("value", function (snapshot) {
